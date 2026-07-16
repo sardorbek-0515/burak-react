@@ -1,9 +1,33 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
+import React,{ useState, useEffect } from "react";
 
 export default function HomeNavbar() {
   const authMember = null;
+ const [count, setCount] = useState<number>(0);
+  const [value, setvalue] = useState<boolean>(true);
+  /**======================== useEffect hook ================================== */
+  /** useEffect doim birmarotaba ishga tushadi qayta qayta ishga tushishi uchun [array dependitsy qo'yiladi] */
+  /** useEffect 2ta agrgumenti mavjut colback xamda array dependitsy  */
+
+  useEffect(() => {
+    console.log("componentDidMount"); // databasedan malumotni olib kelamiz(data fetch)
+    setCount(count + 1);
+
+    return () => {
+      console.log("componentWillUnmount");
+    };
+  }, [value]); //omponentDidUpdate() {}
+
+  /** HANDLERS*/
+
+  const buttonHandler = () => {
+    setvalue(!value);
+  };
+
+
   return (
     <div className="home-navbar">
       <Container className="navbar-container">
@@ -68,10 +92,15 @@ export default function HomeNavbar() {
               World's Most Delicious Cousine
             </Box>
             <Box className={"wel-txt"}>The Choice, not just a choice</Box>
-            <Box className={"service-txt"}>24 hours service</Box>
+            <Box className={"service-txt"}> {count} hours service</Box>
             <Box className={"signup"}>
               {!authMember ? (
-                <Button variant="contained" className="signup-button">
+               <Button
+                  variant={"contained"}
+                  className={"signup-button"}
+                  // onClick={() => setcount(count + 1)}
+                  onClick={() => buttonHandler()}
+                >
                   SIGN UP
                 </Button>
               ) : null}

@@ -13,8 +13,8 @@ import "../../../css/help.css";
 import { faq } from "../../../lib/data/faq";
 import { terms } from "../../../lib/data/terms";
 
-export default function HelpPage() {
-  const [value, setValue] = React.useState("1");
+export default function HelpPage() {// 
+  const [value, setValue] = React.useState("1");// suniy state hollar orqali
 
   /** HANDLERS **/
   const handleChange = (e: React.SyntheticEvent, newValue: string) => {

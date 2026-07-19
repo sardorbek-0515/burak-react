@@ -13,7 +13,7 @@ export default function HomeNavbar() {
   /** useEffect 2ta agrgumenti mavjut colback xamda array dependitsy  */
 
   useEffect(() => {
-    console.log("componentDidMount"); // databasedan malumotni olib kelamiz(data fetch)
+    console.log("componentDidMount"); // backendan malumotni olib kelamiz(data fetch)
     setCount(count + 1);
 
     return () => {

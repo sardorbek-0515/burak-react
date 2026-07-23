@@ -1,18 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { createSelector } from "reselect";
-import { AppRootState } from "../../../lib/types/screen";
-import HomePage from ".";
+/* eslint-disable @typescript-eslint/no-unused-vars */ // ishlatilmagan o'zgaruvchi haqida ogohlantirmani o'chirib qo'yadi
+import { createSelector } from "reselect"; // memoize qiluvchi selektor yasovchi funksiya
+import { AppRootState } from "../../../lib/types/screen"; // butun ilova ombori tipini olib kelyapti
+import HomePage from "."; // shu papkadagi HomePage komponentini olib kelyapti (ishlatilmayapti)
 
-const selectHomePage = (state: AppRootState) => state.homePage;
-export const retrievePopularDishes = createSelector(
-    selectHomePage,
-    (HomePage) => HomePage.popularDishes,
+const selectHomePage = (state: AppRootState) => state.homePage; // butun ombordan faqat homePage bo'limini oladi
+export const retrievePopularDishes = createSelector( // mashhur taomlarni o'qib beruvchi selektor
+    selectHomePage, // homePage bo'limidan
+    (HomePage) => HomePage.popularDishes, // faqat popularDishes qismini qaytaradi
 );
-export const retrieveNewDishes = createSelector(
-    selectHomePage,
-    (HomePage) => HomePage.newDishes,
+export const retrieveNewDishes = createSelector( // yangi taomlarni o'qib beruvchi selektor
+    selectHomePage, // homePage bo'limidan
+    (HomePage) => HomePage.newDishes, // faqat newDishes qismini qaytaradi
 );
-export const retrieveTopUsers = createSelector(
-    selectHomePage,
-    (HomePage) => HomePage.topUsers,
+export const retrieveTopUsers = createSelector( // top userlarni o'qib beruvchi selektor
+    selectHomePage, // homePage bo'limidan
+    (HomePage) => HomePage.topUsers, // faqat topUsers qismini qaytaradi
 );

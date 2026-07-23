@@ -1,20 +1,20 @@
-import { Member } from "./member";
-import { Product } from "./product";
+import { Member } from "./member"; // Member tipini olib kelyapti
+import { Product } from "./product"; // Product tipini olib kelyapti
 
 /** REACT APP STATE **/
-export interface AppRootState {
-    homePage: HomePageState;
-    // productPage: ProductsPageState;
+export interface AppRootState { // butun ilovaning ombor shakli
+    homePage: HomePageState; // homePage bo'limi shu tipda bo'ladi
+    // productPage: ProductsPageState; // kelajakda qo'shiladigan bo'lim (hozircha o'chirilgan)
 
 }
 
 /** HOMEPAGE **/
-export interface HomePageState {
-    popularDishes: Product[];
-    newDishes: Product[];
-    topUsers: Member[];
+export interface HomePageState { // homePage ombori qanday shaklda bo'lishi
+    popularDishes: Product[]; // mashhur taomlar - Product massivi
+    newDishes: Product[]; // yangi taomlar - Product massivi
+    topUsers: Member[]; // top userlar - Member massivi
 }
 
-/** PRODUCTS PAGE **/
+/** PRODUCTS PAGE **/ // kelajakda productlar sahifasi uchun joy
 
-/** ORDERS PAGE **/
+/** ORDERS PAGE **/ // kelajakda buyurtmalar sahifasi uchun joy

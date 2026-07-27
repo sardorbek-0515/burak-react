@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Box, Container, Stack } from "@mui/material";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -7,15 +8,28 @@ import Typography from "@mui/joy/Typography";
 import { CssVarsProvider } from "@mui/joy/styles";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Divider from "../../components/divider";
+import {  useSelector } from "react-redux"; // omborga buyruq jo'natish va o'qish uchun hook'lar
+import { createSelector } from "reselect"; // memoize qiluvchi selektor yasovchi funksiya
+import { retrieveNewDishes } from "./selector"; // mashhur taomlarni ombordan o'quvchi selektor
+import { Product } from "../../../lib/types/product"; // Product tipini olib kelyapti
+import { serverApi } from "../../../lib/config";
+import { ProductCollection, ProductSize } from "../../../lib/enums/product.enum";
 
-const newDishes = [
-  { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-];
+
+/** REDUX SLICE & SELECTOR **/
+
+const newDishesRetriever = createSelector( // mashhur taomlarni olib beruvchi tayyor selektor
+  retrieveNewDishes, // asosiy selektordan
+  (newDishes) => ({ newDishes }), // natijani object shaklida qaytaradi
+);
+
 
 export default function NewDishes() {
+
+  const {newDishes} = useSelector(newDishesRetriever);
+
+    console.log("newDishes:", newDishes )
+
   return (
     <div className={"new-products-frame"}>
       <Container>
@@ -24,13 +38,17 @@ export default function NewDishes() {
           <Stack className={"cards-frame"}>
             <CssVarsProvider>
               {newDishes.length !== 0 ? (
-                newDishes.map((ele, index) => {
+                newDishes.map((product: Product) => {
+                const imagePath = `${serverApi}/${product.productImages[0]}`
+                const sizeVolume = product.productCollection === ProductCollection.DRINK 
+                ? product.productVolume + "l" 
+                : product.productSize + "size";
                   return (
-                    <Card key={index} variant="outlined" className={"card"}>
+                    <Card key={product._id} variant="outlined" className={"card"}>
                       <CardOverflow>
-                        <div className="product-sale">Normal size</div>
+                        <div className="product-sale"> {sizeVolume} </div>
                         <AspectRatio ratio="1">
-                          <img src={ele.imagePath} alt="" />
+                          <img src={imagePath} alt="" />
                         </AspectRatio>
                       </CardOverflow>
 
@@ -38,14 +56,14 @@ export default function NewDishes() {
                         <Stack className="info">
                           <Stack flexDirection={"row"}>
                             <Typography className={"title"}>
-                              {ele.productName}
+                              {product.productName}
                             </Typography>
                             <Divider width="2" height="24" bg="#d9d9d9" />
-                            <Typography className={"price"}>$12</Typography>
+                            <Typography className={"price"}>${product.productPrice}</Typography>
                           </Stack>
                           <Stack>
                             <Typography className={"views"}>
-                              20
+                              {product.productViews}
                               <VisibilityIcon
                                 sx={{ fontSize: 20, marginLeft: "5px" }}
                               />

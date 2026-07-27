@@ -9,53 +9,59 @@ import PopularDishes from "./PopularDishes"; // mashhur taomlar komponentini oli
 import Statistics from "./Statistics"; // statistika komponentini olib kelyapti
 import { useDispatch } from "react-redux"; // omborga buyruq jo'natish va o'qish uchun hook'lar
 import { Dispatch } from "@reduxjs/toolkit"; // dispatch funksiyasining tipi
-import { setNewDishes, setPopularDishes } from "./slice"; // mashhur taomlarni omborga yozuvchi action
+import { setNewDishes, setPopularDishes, setTopUsers } from "./slice"; // mashhur taomlarni omborga yozuvchi action
 import { Product } from "../../../lib/types/product"; // Product tipini olib kelyapti
 import ProductService from "../../services/ProductService"
 import { ProductCollection } from "../../../lib/enums/product.enum";
+import MemberService from "../../services/MemberService ";
+import { Member } from "../../../lib/types/member";
 import "../../../css/home.css"; // bosh sahifa uchun CSS faylini ulaydi
 
 
 
 /** REDUX SLICE & SELECTOR **/
-const actionDispatch = (dispatch: Dispatch) => ({ // dispatch'ni o'rab, qisqa chaqiruv yasovchi funksiya
-  setPopularDishes: (data: Product[]) => dispatch(setPopularDishes(data)), // chaqirilganda action'ni dispatch qiladi
+const actionDispatch = (dispatch: Dispatch) => ({ 
+  setPopularDishes: (data: Product[]) => dispatch(setPopularDishes(data)), 
   setNewDishes: (data: Product[]) => dispatch(setNewDishes(data)),
+  setTopUsers: (data: Member[]) => dispatch(setTopUsers(data))
 });
 
 
 export default function HomePage() { // HomePage komponentini yasab, export qiladi
-  const { setPopularDishes, setNewDishes } = actionDispatch(useDispatch()); // dispatch funksiyasini olib, setPopularDishes'ni ajratadi
+  const { setPopularDishes, setNewDishes, setTopUsers } = actionDispatch(useDispatch()); // dispatch funksiyasini olib, setPopularDishes'ni ajratadi
 
 
- useEffect(() => { // komponent ekranga chiqqanda ishga tushadigan effekt
-  const product = new ProductService(); // ProductService'dan yangi obyekt yaratadi
+ useEffect(() => {
+  const product = new ProductService();
 
   product
     .getProducts({
       page: 1,
       limit: 4,
-      order: "productViews", // ko'p ko'rilgan bo'yicha saralaydi
+      order: "productViews",
       productCollection: ProductCollection.DISH,
     })
-    .then(data => {
-      setPopularDishes(data); // kelgan datani omborga (redux) saqlaydi
+    .then((data) => {
+      setPopularDishes(data);
     })
-    .catch(err => console.log(err)); // xatolik bo'lsa konsolga chiqaradi
+    .catch((err) => console.log(err));
 
   product
     .getProducts({
       page: 1,
       limit: 4,
-      order: "createdAt", // eng yangi qo'shilganlar bo'yicha saralaydi 4ta
-      // productCollection: ProductCollection.DISH,
+      order: "createdAt",
     })
-    .then(data => {
-      setNewDishes(data);
-    })
-    .catch(err => console.log(err)); // xatolik bo'lsa konsolga chiqaradi
+    .then((data) => setNewDishes(data))
+    .catch((err) => console.log(err));
 
-}, []); // bo'sh massiv - faqat bir marta, komponent ochilganda ishlaydi
+  const member = new MemberService();
+
+  member
+    .getTopUsers()
+    .then((data) => setTopUsers(data))
+    .catch((err) => console.log(err));
+}, []);
 
   // console.log("popularDishes:", popularDishes )
 

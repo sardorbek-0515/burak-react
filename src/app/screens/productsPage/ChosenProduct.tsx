@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { Container, Stack, Box } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,6 +11,34 @@ import "swiper/css/free-mode"; // @ts-ignore
 import "swiper/css/navigation"; // @ts-ignore
 import "swiper/css/thumbs"; // @ts-ignore
 import { FreeMode, Navigation, Thumbs } from "swiper";
+import { createSelector } from "reselect"; // dispatch funksiyasining tipi
+import { useDispatch, useSelector } from "react-redux"; // omborga buyruq jo'natish va o'qish uchun hook'lar
+import {Dispatch } from "@reduxjs/toolkit"
+import {  setRestaurant, setChosenProduct } from "./slice"; // mashhur taomlarni omborga yozuvchi action
+import { Product } from "../../../lib/types/product";
+import { retrieveChosenProduct, retrieveRestaurant } from "./selector"; // mashhur taomlarni ombordan 
+
+
+
+/** REDUX SLICE & SELECTOR **/
+const actionDispatch = (dispatch: Dispatch) => ({
+  setRestaurant: (data: Product[]) => dispatch(setRestaurant(data)),
+  setChosenProduct: (data: Product[]) => dispatch(setChosenProduct(data)),
+});
+
+const chosenProductsRetriever = createSelector( 
+  retrieveChosenProduct,(chosenProduct)  =>({
+  chosenProduct,
+})
+);
+const restaurantRetriever = createSelector( 
+  retrieveRestaurant,(restaurant)  =>({
+  restaurant,
+})
+);
+
+
+
 
 export default function ChosenProduct() {
   return (

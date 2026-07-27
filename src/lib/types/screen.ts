@@ -4,7 +4,7 @@ import { Product } from "./product"; // Product tipini olib kelyapti
 /** REACT APP STATE **/
 export interface AppRootState { // butun ilovaning ombor shakli
     homePage: HomePageState; // homePage bo'limi shu tipda bo'ladi
-    // productPage: ProductsPageState; // kelajakda qo'shiladigan bo'lim (hozircha o'chirilgan)
+    productPage: ProductsPageState; // kelajakda qo'shiladigan bo'lim (hozircha o'chirilgan)
 
 }
 
@@ -16,5 +16,9 @@ export interface HomePageState { // homePage ombori qanday shaklda bo'lishi
 }
 
 /** PRODUCTS PAGE **/ // kelajakda productlar sahifasi uchun joy
-
+export interface ProductsPageState {
+    restaurant: Member | null;
+    chosenProduct: Product | null;
+    products: Product[];
+}
 /** ORDERS PAGE **/ // kelajakda buyurtmalar sahifasi uchun joy

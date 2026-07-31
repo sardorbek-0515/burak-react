@@ -19,10 +19,10 @@ import { Product } from "../../../lib/types/product";
 import { retrieveChosenProduct, retrieveRestaurant } from "./selector"; // mashhur taomlarni ombordan o'quvchi selektor
 import { useParams } from "react-router";
 import ProductService from "../../services/ProductService";
-import MemberService from "../../services/MemberService ";
+import MemberService from "../../services/MemberService";
 import { serverApi } from "../../../lib/config";
 import { Member } from "../../../lib/types/member";
-import { CartItem } from "../../../lib/types/product"; // CartItem tipi - loyihangizdagi joyiga qarab manzilni tekshiring
+import { CartItem } from "../../../lib//types/search"; // CartItem tipi - loyihangizdagi joyiga qarab manzilni tekshiring
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({

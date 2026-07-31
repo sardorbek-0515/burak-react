@@ -77,7 +77,7 @@ export default function Products(props: ProductsProps) {
     setProductSearch({ ...productSearch });
   };
 
-  const searchProductHandlen = () => {
+  const searchProductHandler = () => {
     productSearch.search = searchText;
     setProductSearch({ ...productSearch });
   };
@@ -107,14 +107,14 @@ export default function Products(props: ProductsProps) {
                   value={searchText}
                   onChange={(e) => setsearchText(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") searchProductHandlen();
+                    if (e.key === "Enter") searchProductHandler();
                   }}
                 />
                 <Button
                   className={"single-button-search"}
                   variant="contained"
                   endIcon={<SearchIcon />}
-                  onClick={searchProductHandlen}
+                  onClick={searchProductHandler}
                 >
                   Search
                 </Button>
@@ -267,7 +267,7 @@ export default function Products(props: ProductsProps) {
                           }}
                         >
                           <img
-                            src={"/icons/shopping-cart.svg"}
+                            src={"/public/icons/shopping-cart.svg"}
                             style={{ display: "flex" }}
                           />
                         </Button>

@@ -13,7 +13,7 @@ import { setNewDishes, setPopularDishes, setTopUsers } from "./slice"; // mashhu
 import { Product } from "../../../lib/types/product"; // Product tipini olib kelyapti
 import ProductService from "../../services/ProductService"
 import { ProductCollection } from "../../../lib/enums/product.enum";
-import MemberService from "../../services/MemberService ";
+import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
 import "../../../css/home.css"; // bosh sahifa uchun CSS faylini ulaydi
 

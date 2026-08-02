@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+// import React, { useState, useEffect } from "react";
 
 
 import {
@@ -55,7 +55,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
         <Stack className="menu">
           <Box>
             <NavLink to="/">
-              <img className="brand-logo" src="/public/icons/bumarak.svg" />
+              <img className="brand-logo" src="/icons/bumarak.svg"  alt="Bumarak logo"/>
             </NavLink>
           </Box>
           <Stack className="links">
@@ -107,14 +107,14 @@ export default function HomeNavbar(props: HomeNavbarProps) {
               </Box>
             ) : (
               <img
-                className="user-avatar"
-                src={
-                  authMember?.memberImage
-                    ? `${serverApi}/${authMember?.memberImage}`
-                    : "/icons/default-user.svg"
-                }
-                aria-haspopup={"true"}
-                onClick={handleLogoutClick}
+               className="user-avatar"
+              src={
+              authMember?.memberImage
+              ? `${serverApi}/${authMember?.memberImage}`
+              : "/icons/default-user.svg"
+              }
+              alt="user avatar"
+             onClick={handleLogoutClick}
               />
             )}
 

@@ -266,10 +266,11 @@ export default function Products(props: ProductsProps) {
                             e.stopPropagation();
                           }}
                         >
-                          <img
-                            src={"/public/icons/shopping-cart.svg"}
-                            style={{ display: "flex" }}
-                          />
+                       <img
+                          src={"/icons/shopping-cart.svg"}
+                          style={{ display: "flex" }}
+                          alt="shopping cart"
+                        />
                         </Button>
                         <Button className={"view-btn"} sx={{ right: "36px" }}>
                           <Badge
@@ -327,21 +328,21 @@ export default function Products(props: ProductsProps) {
         </Stack>
       </Container>
 
-      <div className={"brands-logo"}>
+ <div className={"brands-logo"}>
         <Container className={"family-brands"}>
           <Box className={"category-title"}>Our Family Brands</Box>
           <Stack className={"brand-list"}>
             <Box className={"review-box"}>
-              <img src={"/img/gurme.png"} />
+              <img src={"/img/gurme.png"} alt="Gurme brand logo" />
             </Box>
             <Box className={"review-box"}>
-              <img src={"/img/seafood.png"} />
+              <img src={"/img/seafood.png"} alt="Seafood brand logo" />
             </Box>
             <Box className={"review-box"}>
-              <img src={"/img/doner.png"} />
+              <img src={"/img/doner.png"} alt="Doner brand logo" />
             </Box>
             <Box className={"review-box"}>
-              <img src={"/img/sweets.png"} />
+              <img src={"/img/sweets.png"} alt="Sweets brand logo" />
             </Box>
           </Stack>
         </Container>
@@ -356,6 +357,7 @@ export default function Products(props: ProductsProps) {
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96326.03685561026!2d28.92022666528895!3d41.02112846139867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab82bea99445f%3A0x6ed7f4baceb4476c!2sMaiden&#39;s%20Tower!5e0!3m2!1sen!2skr!4v1757106097524!5m2!1sen!2skr"
               width="1320"
               height="500"
+              title="Our address map"
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
           </Stack>

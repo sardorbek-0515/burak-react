@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from "react";
 import Cookies from "universal-cookie";
 import { Member } from "../../lib/types/member";
 import { GlobalContext } from "../hooks/useGlobals";
+import useBasket from "../hooks/useBasket";
 
 const ContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const cookies = new Cookies();
@@ -12,10 +13,19 @@ const ContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       ? JSON.parse(localStorage.getItem("memberData") as string)
       : null,
   );
-  console.log("=== verify ===");
+  const [orderBuilder, setOrderBuilder] = useState<Date>(new Date());
+  const basket = useBasket();
 
   return (
-    <GlobalContext.Provider value={{ authMember, setAuthMember }}>
+    <GlobalContext.Provider
+      value={{
+        authMember,
+        setAuthMember,
+        orderBuilder,
+        setOrderBuilder,
+        BASKET: basket,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );

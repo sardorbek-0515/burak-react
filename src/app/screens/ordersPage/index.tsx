@@ -1,4 +1,5 @@
-import { useState, SyntheticEvent } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState, SyntheticEvent, useEffect } from "react";
 import { Container, Stack, Box } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -7,35 +8,63 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PausedOrders from "./PausedOrders";
 import ProcessOrders from "./ProcessOrders";
 import FinishedOrders from "./FinishedOrders";
-import { useDispatch } from "react-redux"; // omborga buyruq jo'natish va o'qish uchun hook'lar
-import { Dispatch } from "@reduxjs/toolkit"; // dispatch funksiyasining tipi
-import { setPausedOrders, setProcessOrders, setFinishedOrders } from "./slice"; // 
+import { useDispatch } from "react-redux";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setPausedOrders, setProcessOrders, setFinishedOrders } from "./slice";
 import "../../../css/order.css";
 import { Product } from "../../../lib/types/product";
-import { Order } from "../../../lib/types/order";
-
-
-
+import { Order, OrderInquiry } from "../../../lib/types/order";
+import { useHistory } from "react-router";
+import { OrderStatus } from "../../../lib/enums/order.enum";
+import OrderService from "../../services/OrderService";
+import { useGlobals } from "../../hooks/useGlobals";
+import { serverApi } from "../../../lib/config";
+import { MemberType } from "../../../lib/enums/member.enum";
 
 /** REDUX SLICE & SELECTOR **/
-const actionDispatch = (dispatch: Dispatch) => ({ 
-  setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)), 
+const actionDispatch = (dispatch: Dispatch) => ({
+  setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
   setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
-  setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data))
+  setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
 });
 
-
 export default function OrdersPage() {
-  const {setPausedOrders, setProcessOrders, setFinishedOrders} = 
+  const { setPausedOrders, setProcessOrders, setFinishedOrders } =
     actionDispatch(useDispatch());
+  const history = useHistory();
+  const { orderBuilder, authMember } = useGlobals();
   const [value, setValue] = useState("1");
 
-  const handleChange = (e: SyntheticEvent, newValue: string) => {
+  const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
+    page: 1,
+    limit: 5,
+    orderStatus: OrderStatus.PAUSE,
+  });
+
+  useEffect(() => {
+    const order = new OrderService();
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PAUSE })
+      .then((data) => setPausedOrders(data))
+      .catch((err) => console.log(err));
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PROCESS })
+      .then((data) => setProcessOrders(data))
+      .catch((err) => console.log(err));
+
+    order
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.FINISH })
+      .then((data) => setFinishedOrders(data))
+      .catch((err) => console.log(err));
+  }, [orderInquiry, orderBuilder, setPausedOrders, setProcessOrders, setFinishedOrders]);
+
+  /** <========== HANDLERS ==========> **/
+  const handleCHange = (e: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
- 
-/** HANDLERS */
-
+  if (!authMember) history.push("/");
   return (
     <div className={"order-page"}>
       <Container className="order-container">
@@ -45,7 +74,7 @@ export default function OrdersPage() {
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs
                   value={value}
-                  onChange={handleChange}
+                  onChange={handleCHange}
                   aria-label="basic tabs example"
                   className={"table_list"}
                 >
@@ -56,8 +85,8 @@ export default function OrdersPage() {
               </Box>
             </Box>
             <Stack className={"order-main-content"}>
-              <PausedOrders />
-              <ProcessOrders />
+              <PausedOrders setValue={setValue} />
+              <ProcessOrders setValue={setValue} />
               <FinishedOrders />
             </Stack>
           </TabContext>
@@ -68,27 +97,37 @@ export default function OrdersPage() {
             <Box className={"member-box"}>
               <div className={"order-user-img"}>
                 <img
-                  src={"/icons/default-user.svg"}
+                  src={
+                     authMember?.memberImage
+                      ? `${serverApi}/${authMember.memberImage}`
+                       : "/icons/default-user.svg"
+                      }
                   className={"order-user-avatar"}
                   alt=""
                 />
                 <div className={"order-user-icon-box"}>
-                  <img
-                    src={"/icons/user-badge.svg"}
-                    className={"order-user-prof-img"}
-                    alt=""
-                  />
-                </div>
+              <img
+                src={
+                  authMember?.memberType === MemberType.RESTAURANT
+                    ? "/icon/restaurant.svg"
+                     : "/icons/user-badge.svg"
+                }
+                className={"order-user-prof-img"}
+                  alt=""
+                />
+</div>
               </div>
-              <span className={"order-user-name"}>Martin</span>
-              <span className={"order-user-prof"}>User</span>
+              <span className={"order-user-name"}> {authMember?.memberNick}</span>
+              <span className={"order-user-prof"}> {authMember?.memberType}</span>
             </Box>
             <Box className={"liner"}></Box>
             <Box className={"order-user-address"}>
               <div style={{ display: "flex" }}>
                 <LocationOnIcon />
               </div>
-              <div className={"spec-address-txt"}>Do not exist</div>
+              <div className={"spec-address-txt"}>{authMember?.memberAddress 
+                  ? authMember.memberAddress
+                  : "do not exist"}</div>
             </Box>
           </Box>
           <Box className={"order-info-box"} sx={{ mt: "15px" }}>

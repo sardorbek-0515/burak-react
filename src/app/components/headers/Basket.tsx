@@ -8,19 +8,17 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
-import { serverApi } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import OrderService from "../../services/OrderService";
+import { useGlobals } from "../../hooks/useGlobals";
 
-interface BasketProps {
-  cartItems: CartItem[];
-  onAdd: (input: CartItem) => void;
-  onRemove: (input: CartItem) => void;
-  onDelete: (input: CartItem) => void;
-  onDeleteAll: () => void;
-}
+interface BasketProps {}
 
 export default function Basket(props: BasketProps) {
-  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
-  const authMember = null;
+  const { BASKET } = useGlobals();
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = BASKET;
+  const { authMember, setOrderBuilder } = useGlobals();
   const history = useHistory();
   const itemsPrice: number = cartItems.reduce(
     (a: number, c: CartItem) => a + c.quantity * c.price,
@@ -41,6 +39,27 @@ export default function Basket(props: BasketProps) {
     setAnchorEl(null);
   };
 
+  /** <========== proceedOrderHandler ==========> **/
+  const proceedOrderHandler = async () => {
+    try {
+      handleClose();
+
+      if (!authMember) throw new Error(Messages.error2);
+
+      const order = new OrderService();
+      await order.createOrder(cartItems);
+
+      onDeleteAll();
+
+      // REFRESH VIA CONTEXT
+      setOrderBuilder(new Date());
+      history.push("/orders");
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
+    }
+  };
+
   return (
     <Box className={"hover-line"}>
       <IconButton
@@ -51,10 +70,10 @@ export default function Basket(props: BasketProps) {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        <Badge badgeContent={cartItems.length} color="secondary">
-          <img src={"/icons/shopping-cart.svg"}  alt="Bumarak logo"/>
-        </Badge>
-      </IconButton>
+      <Badge badgeContent={cartItems.length} color="secondary">
+        <img src={"/icons/shopping-cart.svg"} alt="shopping cart" />
+      </Badge>
+       </IconButton>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -117,8 +136,8 @@ export default function Basket(props: BasketProps) {
                         color={"primary"}
                         onClick={() => onDelete(item)}
                       />
-                    </div>
-                    <img src={imagePath} className={"product-img"} alt="Bumarak logo"/>
+                    <img src={imagePath} className={"product-img"} alt="product" /></div>
+                    
                     <span className={"product-name"}>{item.name}</span>
                     <p className={"product-price"}>
                       ${item.price} x {item.quantity}
@@ -147,7 +166,11 @@ export default function Basket(props: BasketProps) {
               <span className={"price"}>
                 Total: ${totalPrice} ({itemsPrice} +{shippingCost})
               </span>
-              <Button startIcon={<ShoppingCartIcon />} variant={"contained"}>
+              <Button
+                onClick={proceedOrderHandler}
+                startIcon={<ShoppingCartIcon />}
+                variant={"contained"}
+              >
                 Order
               </Button>
             </Box>

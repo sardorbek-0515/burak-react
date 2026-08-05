@@ -115,7 +115,7 @@ export default function OrdersPage() {
                 className={"order-user-prof-img"}
                   alt=""
                 />
-</div>
+               </div>
               </div>
               <span className={"order-user-name"}> {authMember?.memberNick}</span>
               <span className={"order-user-prof"}> {authMember?.memberType}</span>
